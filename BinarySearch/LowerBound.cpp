@@ -2,17 +2,20 @@
 using namespace std;
 
 int lowerBound(const vector<int>& nums, int target) {
-    int left = 0, right = nums.size() - 1;
-    while(left < right) {
+    int n = nums.size();
+    int left = 0, right = n-1;
+    int ans = n;
+    while(left <= right) {
         int mid = left + (right - left) / 2;
-        if(nums[mid] < target) {
-            left = mid+1;
+        if(nums[mid] >= target) {
+            ans  = mid;
+            right = mid-1;
         }
         else {
-            right = mid;
+            left = mid+1;
         }
     }
-    return left;
+    return ans;
 }
 
 void printArray(const vector<int>& nums) {
