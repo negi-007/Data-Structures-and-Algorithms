@@ -1,4 +1,5 @@
 #include <iostream>
+#include <queue>
 using namespace std;
 
 struct Node {
@@ -36,6 +37,41 @@ private:
         inorder(node->right);
     }
 
+    void preorder(Node* node) {
+        if (node == nullptr)
+            return;
+        cout << node->data << " ";
+        preorder(node->left);
+        preorder(node->right);
+    }
+
+    void postorder(Node* node) {
+        if (node == nullptr)
+            return;
+        postorder(node->left);
+        postorder(node->right);
+        cout << node->data << " ";
+    }
+
+    void levelOrder(Node* node) {
+        if (node == nullptr)
+            return;
+
+        queue<Node*> q;
+        q.push(node);
+
+        while (!q.empty()) {
+            Node* current = q.front();
+            cout << current->data << " ";
+            q.pop();
+
+            if (current->left != nullptr)
+                q.push(current->left);
+            if (current->right != nullptr)
+                q.push(current->right);
+        }
+    }
+
     Node* search(Node* node, int value) {
         if (node == nullptr || node->data == value)
             return node;
@@ -61,7 +97,6 @@ private:
         else if (value > node->data)
             node->right = remove(node->right, value);
         else {
-            // Node with one or no children
             if (node->left == nullptr) {
                 Node* temp = node->right;
                 delete node;
@@ -73,7 +108,6 @@ private:
                 return temp;
             }
 
-            // Node with two children
             Node* temp = findMin(node->right);
             node->data = temp->data;
             node->right = remove(node->right, temp->data);
@@ -90,6 +124,21 @@ public:
 
     void inorder() {
         inorder(root);
+        cout << endl;
+    }
+
+    void preorder() {
+        preorder(root);
+        cout << endl;
+    }
+
+    void postorder() {
+        postorder(root);
+        cout << endl;
+    }
+
+    void levelOrder() {
+        levelOrder(root);
         cout << endl;
     }
 
@@ -114,9 +163,12 @@ int main() {
         cout << "\nBinary Search Tree Menu:\n";
         cout << "1. Insert a node\n";
         cout << "2. Inorder Traversal\n";
-        cout << "3. Search for a node\n";
-        cout << "4. Delete a node\n";
-        cout << "5. Exit\n";
+        cout << "3. Preorder Traversal\n";
+        cout << "4. Postorder Traversal\n";
+        cout << "5. Level Order Traversal\n";
+        cout << "6. Search for a node\n";
+        cout << "7. Delete a node\n";
+        cout << "8. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
 
@@ -131,22 +183,34 @@ int main() {
                 bst.inorder();
                 break;
             case 3:
+                cout << "Preorder traversal: ";
+                bst.preorder();
+                break;
+            case 4:
+                cout << "Postorder traversal: ";
+                bst.postorder();
+                break;
+            case 5:
+                cout << "Level order traversal: ";
+                bst.levelOrder();
+                break;
+            case 6:
                 cout << "Enter the value to search: ";
                 cin >> value;
                 bst.search(value);
                 break;
-            case 4:
+            case 7:
                 cout << "Enter the value to delete: ";
                 cin >> value;
                 bst.remove(value);
                 break;
-            case 5:
+            case 8:
                 cout << "Exiting program." << endl;
                 break;
             default:
                 cout << "Invalid choice! Please try again." << endl;
         }
-    } while (choice != 5);
+    } while (choice != 8);
 
     return 0;
 }
